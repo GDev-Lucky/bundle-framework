@@ -1,0 +1,11 @@
+# Roblox place builds and Studio locks
+*.rbxl
+*.rbxlx
+*.rbxl.lock
+*.rbxlx.lock
+
+# Generated Luau LSP source maps
+sourcemap.json
+
+# Local tool state
+.aftman/

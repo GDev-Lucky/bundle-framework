@@ -1,0 +1,15 @@
+{
+    "editor.defaultFormatter": "JohnnyMorganz.stylua",
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "luau-lsp.completion.autocompleteEnd": true,
+    "luau-lsp.diagnostics.strictDatamodelTypes": false,
+    "luau-lsp.fflags.enableNewSolver": true,
+    "luau-lsp.format.convertQuotes": true,
+    "luau-lsp.sourcemap.autogenerate": true,
+    "luau-lsp.sourcemap.enabled": true,
+    "luau-lsp.sourcemap.rojoProjectFile": "example.project.json",
+    "luau-lsp.sourcemap.sourcemapFile": "sourcemap.json",
+    "luau-lsp.sourcemap.useVSCodeWatcher": false,
+    "luau-lsp.studioPlugin.enabled": true
+}

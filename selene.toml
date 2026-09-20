@@ -1,0 +1,5 @@
+std = "selene-std"
+
+[lints]
+manual_table_clone = "allow"
+unused_variable = "allow"

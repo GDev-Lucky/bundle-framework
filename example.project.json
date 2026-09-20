@@ -1,0 +1,17 @@
+{
+	"name": "bundle-framework-example",
+	"tree": {
+		"$className": "DataModel",
+		"ServerStorage": {
+			"framework": {
+				"$path": "src"
+			},
+			"manifest": {
+				"$path": "examples/basic/src/manifest.luau"
+			},
+			"bundles": {
+				"$path": "examples/basic/src/bundles"
+			}
+		}
+	}
+}

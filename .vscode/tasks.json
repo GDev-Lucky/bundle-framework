@@ -1,0 +1,33 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Format check",
+            "type": "shell",
+            "command": "stylua",
+            "args": ["--check", "src", "examples"],
+            "problemMatcher": []
+        },
+        {
+            "label": "Lint",
+            "type": "shell",
+            "command": "selene",
+            "args": ["src", "examples/basic/src"],
+            "problemMatcher": []
+        },
+        {
+            "label": "Build example",
+            "type": "shell",
+            "command": "rojo",
+            "args": ["build", "example.project.json", "--output", "bundle-framework-example.rbxlx"],
+            "problemMatcher": []
+        },
+        {
+            "label": "Build package",
+            "type": "shell",
+            "command": "rojo",
+            "args": ["build", "package.project.json", "--output", "bundle-framework.rbxm"],
+            "problemMatcher": []
+        }
+    ]
+}
