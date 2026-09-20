@@ -3,7 +3,7 @@
 - importance: 0.95
 - confidence: 1.0
 - createdAt: 2026-09-21T00:00:00Z
-- lastUsedAt: 2026-09-21T00:00:00Z
+- lastUsedAt: 2026-09-21T12:00:00Z
 
 ## Confirmed
 
@@ -21,7 +21,7 @@
 - A bundle exposes narrow public API partitions; other bundles do not require its private implementation modules.
 - Explicit entries define the boundary for any future lifecycle behavior; ordinary implementation modules remain ordinary modules.
 - A future runtime must preserve server authority and never trust client-provided state.
-- Client asset exposure is an optional feature Bundle concern, not a core framework service or requirement.
+- Client asset exposure is a core framework responsibility for a future runtime and must remain server-authoritative.
 
 ## Explicit Boundary
 

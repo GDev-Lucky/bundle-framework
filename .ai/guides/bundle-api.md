@@ -3,7 +3,7 @@
 - importance: 0.96
 - confidence: 1.0
 - createdAt: 2026-09-21T00:00:00Z
-- lastUsedAt: 2026-09-21T00:00:00Z
+- lastUsedAt: 2026-09-21T12:00:00Z
 - Last Verified: 2026-09-21
 
 ## Scope
@@ -19,12 +19,12 @@ Applies to `src/` and the generic example. It does not define runtime behavior.
 - Keep dependency graphs acyclic and require other bundles only through their declared public API partitions.
 - Treat explicit `entries` as the only candidates for any future lifecycle behavior; private implementation modules are never implicit entries.
 - Keep the API types-first: do not imply `define()` returns a working runtime object.
-- Client asset exposure is not a framework-core responsibility. If needed, provide it through a separate feature Bundle and consume that Bundle's public API.
+- Treat client asset exposure as a core-framework responsibility for a future server-authoritative runtime, while preserving the fact that the current types-first API does not implement exposure.
 - Luau LSP may offer broad second-argument completion across overloaded dependency APIs; diagnostics and return inference remain authoritative.
 
 ## Rationale
 
-The direct manifest-and-definition pairing retains the author-provided structure needed to derive precise dependency API types without generated code. Explicit dependencies and public partitions keep bundle ownership clear while allowing optional features to evolve independently of the core.
+The direct manifest-and-definition pairing retains the author-provided structure needed to derive precise dependency API types without generated code. Explicit dependencies and public partitions keep bundle ownership clear. Core ownership of client asset exposure does not imply that an exposure runtime or API exists in the current implementation.
 
 ## References
 

@@ -17,4 +17,6 @@ function framework.manifest<T>(value: T): (type_helpers.satisfies<T, types.manif
 	return value, define_temp
 end
 
+function framework.start() end
+
 return framework

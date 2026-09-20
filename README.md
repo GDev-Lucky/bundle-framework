@@ -18,9 +18,9 @@ An experimental, types-first Luau API for declaring Roblox bundles and accessing
 - **Optional features over core coupling:** core composition and typing should not require every bundle to adopt unrelated services.
 - **Server authority:** any future runtime must preserve server authority and must not trust client-provided state.
 
-### Client asset exposure is an optional feature
+### Client asset exposure is a core responsibility
 
-Client asset exposure is deliberately **not** part of the Bundle Framework core. A separate feature Bundle may later own asset selection, leases, replication, delivery metadata, client reconstruction, and removal through its own public API. Projects that do not need that feature must be able to use the core framework without it.
+Client asset exposure is part of the Bundle Framework core architecture. A future core runtime will own the server-authoritative mechanisms for selecting declared assets, exposing them to clients, communicating delivery metadata, supporting client reconstruction, and removing exposure when it is no longer needed. The concrete runtime API and lifecycle remain to be designed, implemented, and validated; the current static API does not perform asset exposure.
 
 ## Example
 
@@ -74,7 +74,7 @@ The two-argument form `bundle.require(bundleName, apiName)` preserves valid depe
 
 ## Roadmap
 
-Potential runtime behavior is intentionally out of scope until it is separately designed, implemented, and tested. Any future core runtime should preserve the design philosophy above, while client asset exposure remains an independently installable Bundle feature rather than a core subsystem. The current project should be used as a static declaration and type-inference contract only.
+Potential runtime behavior is intentionally out of scope until it is separately designed, implemented, and tested. Any future core runtime should preserve the design philosophy above and include server-authoritative client asset exposure as a core subsystem. The current project should be used as a static declaration and type-inference contract only.
 
 ## License
 

@@ -8,7 +8,7 @@
 
 ## Scope
 
-This repository currently owns a static Luau typing contract. Do not describe or imply runtime loading, lifecycle execution, networking, client asset exposure, or runtime dependency resolution unless that behavior is implemented and validated here. Keep client asset exposure as an optional feature Bundle concern rather than adding it to the core contract.
+This repository currently implements only a static Luau typing contract. Do not describe or imply that runtime loading, lifecycle execution, networking, client asset exposure, or runtime dependency resolution already works unless that behavior is implemented and validated here. Treat client asset exposure as part of the core framework architecture while keeping proposed runtime APIs and behavior clearly distinguished from the current implementation.
 
 ## Pull requests
 
