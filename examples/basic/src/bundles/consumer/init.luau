@@ -8,5 +8,7 @@ return define({
 	dependencies = {
 		catalog = manifest.catalog,
 	},
-	assets = {},
+	assets = {
+		hello = {},
+	},
 })

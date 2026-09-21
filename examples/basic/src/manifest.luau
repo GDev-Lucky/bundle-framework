@@ -8,11 +8,18 @@ local manifest, define = framework.manifest({
 		bundle = bundles.catalog,
 		api = {
 			server = require(bundles.catalog.public.server),
+			faa = {
+				hello = 1,
+			},
 		},
 	},
 	consumer = {
 		bundle = bundles.consumer,
-		api = {},
+		api = {
+			baa = {
+				hello = 1,
+			},
+		},
 	},
 })
 

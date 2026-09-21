@@ -2,13 +2,13 @@
 local type_helpers = require(script.type_helpers)
 local types = require(script.types)
 
-type description<dependencies> = types.bundle_description<dependencies>
-type object<dependencies> = types.bundle_object<dependencies>
-type satisfies<v, c> = type_helpers.satisfies<v, c>
-type valid_object<dependencies> = object<satisfies<dependencies, { [string]: types.manifest_entry }>>
+type description<D, A> = types.bundle_description<D, A>
+type object<D, A> = types.bundle_object<D, A>
+type satisfies<V, C> = type_helpers.satisfies<V, C>
+type valid_object<D, A> = object<satisfies<D, { [string]: types.manifest_entry }>, A>
 
-local function define_temp<dependencies>(description: description<dependencies>): valid_object<dependencies>
-	return {} :: types.bundle_object<dependencies>
+local function define_temp<D, A>(description: description<D, A>): valid_object<D, A>
+	return {} :: types.bundle_object<D, A>
 end
 
 local framework = {}
