@@ -1,6 +1,0 @@
----
-base: roblox
-
-globals:
-  types:
-    any: true

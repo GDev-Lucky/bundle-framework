@@ -12,7 +12,6 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ok-nick/setup-aftman@v0.4.2
       - run: aftman install
-      - run: stylua --check src examples
-      - run: selene src examples/basic/src
+      - run: stylua --check src examples tooling
       - run: rojo build example.project.json --output bundle-framework-example.rbxlx
       - run: rojo build package.project.json --output bundle-framework.rbxm

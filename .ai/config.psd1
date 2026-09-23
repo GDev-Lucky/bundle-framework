@@ -3,7 +3,7 @@
     RetrievalHalfLifeDays = 120
     RetrievalSoftTokenLimit = 6000
     RetrievalHardTokenLimit = 8000
-    RetrievalRuntimeTokenLimit = 2500
+    RetrievalRuntimeTokenLimit = 1500
     RetrievalMinimumScore = 0.05
     RetrievalMinimumExcerptTokens = 80
     RetrievalMaxResultsPerCategory = 2

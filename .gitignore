@@ -9,3 +9,5 @@ sourcemap.json
 
 # Local tool state
 .aftman/
+
+temp.md

@@ -233,6 +233,19 @@ foreach ($task in $archivedTaskFiles) {
     }
 }
 
+$agentsText = Get-Text (Join-Path $root "AGENTS.md")
+$requiredAgentRules = @(
+    '## Token Discipline',
+    'Search before reading broadly.',
+    'Keep plans to at most five concise steps.',
+    'at most 400 words',
+    'Follow the Memory Workflow and Token Discipline sections'
+)
+foreach ($requiredRule in $requiredAgentRules) {
+    if (-not $agentsText.Contains($requiredRule)) {
+        Add-ValidationError "AGENTS.md is missing required token-discipline rule: $requiredRule"
+    }
+}
 $readmeText = Get-Text (Join-Path $root ".ai\README.md")
 $categoryNames = @("Project", "Architecture", "Decisions", "Previous Work", "Code")
 $categoryTotal = 0

@@ -1,3 +1,3 @@
 # Latest Bundle API Decision
 
-- [`2026-09-21-001-static-types-only-api.md`](../2026-09-21-001-static-types-only-api.md): the public API is a types-only `manifest()` / `define()` contract with typed two-argument dependency API access.
+- [`2026-09-22-001-external-tool-and-luau-runtime.md`](../2026-09-22-001-external-tool-and-luau-runtime.md): the former Luau-only API is removed; a replacement runtime API will be designed after the tool-to-runtime intermediate boundary is defined.

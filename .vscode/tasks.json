@@ -5,14 +5,7 @@
             "label": "Format check",
             "type": "shell",
             "command": "stylua",
-            "args": ["--check", "src", "examples"],
-            "problemMatcher": []
-        },
-        {
-            "label": "Lint",
-            "type": "shell",
-            "command": "selene",
-            "args": ["src", "examples/basic/src"],
+            "args": ["--check", "src", "examples", "tooling"],
             "problemMatcher": []
         },
         {

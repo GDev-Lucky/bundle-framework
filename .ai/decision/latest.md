@@ -1,4 +1,5 @@
 # Latest Decisions
 
-- Bundle API: [`latest/bundle-api.md`](latest/bundle-api.md)
-- Bundle architecture: [`latest/bundle-architecture.md`](latest/bundle-architecture.md)
+- Framework architecture: [`latest/tool-runtime-boundary.md`](latest/tool-runtime-boundary.md)
+- Tool distribution and hosts: [`latest/project-installed-luau-tooling-hosts.md`](latest/project-installed-luau-tooling-hosts.md)
+- Client asset exposure: [`latest/client-asset-exposure.md`](latest/client-asset-exposure.md)

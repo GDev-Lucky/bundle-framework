@@ -1,6 +1,6 @@
 {
 	"name": "bundle-framework",
 	"tree": {
-		"$path": "src"
+		"$className": "Folder"
 	}
 }
