@@ -1,0 +1,3 @@
+# Latest Source-Environment Decision
+
+- [`2026-09-23-006-three-way-source-boundaries.md`](../2026-09-23-006-three-way-source-boundaries.md): `tooling/` contains repository tools, `src/framework/` is portable pure Luau, and `src/runtime/` is Roblox-only; dependencies flow only from runtime to framework, all internal imports are extensionless relative strings, and separate VS Code windows provide standard versus Roblox Luau-LSP analysis.

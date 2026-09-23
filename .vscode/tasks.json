@@ -9,6 +9,24 @@
             "problemMatcher": []
         },
         {
+            "label": "Naming check",
+            "type": "shell",
+            "command": "lune",
+            "args": ["run", "tooling/naming/cli.luau", "check", "src", "examples", "tooling"],
+            "problemMatcher": {
+                "owner": "bundle-framework-naming",
+                "fileLocation": ["relative", "${workspaceFolder}"],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+): (.*) \\[(.*)\\]$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "message": 4,
+                    "code": 5
+                }
+            }
+        },
+        {
             "label": "Build example",
             "type": "shell",
             "command": "rojo",

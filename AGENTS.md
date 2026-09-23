@@ -3,13 +3,15 @@
 ## Project
 
 - Direction: an external authoring/development tool produces a simple intermediate representation consumed by a Luau runtime.
-- Current state: architectural scaffold. `src/`, `examples/`, and `tooling/` intentionally contain no implementation.
+- Current state: architectural scaffold. `tooling/` contains repository development tools; `src/framework/` and `src/runtime/` are intentionally implementation-free package roots.
 - Retained tooling: Roblox, strict Luau when runtime code is added, Rojo, Git, Aftman, and StyLua.
 
 - Treat source and tool configuration as authoritative; inspect relevant files before editing.
 - Preserve a narrow tool-to-runtime boundary. The external tool owns discovery, dependency enforcement, import processing, and type/editor analysis. The runtime consumes generated output and performs Roblox-only behavior.
 - Keep dependency-first acyclic composition, explicit ownership, narrow public API boundaries, and server authority as framework direction.
 - Do not invent a runtime API, generator schema, tool language, lifecycle model, networking, or asset system without an explicit, documented design decision.
+- Keep dependencies one-way: `tooling/` is not framework code, `src/framework/` is portable Luau and may not depend on Roblox or `src/runtime/`, and `src/runtime/` may depend on `src/framework/` but owns Roblox-only behavior.
+- Use relative string-path `require()` calls with forward slashes and no `.luau` suffix; directory imports resolve through `init.luau`.
 
 ## Memory Workflow
 

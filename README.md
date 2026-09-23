@@ -37,8 +37,9 @@ The systems below are confirmed architecture, **not implemented APIs**.
 
 ## Repository layout
 
-- [`tooling/`](tooling): future external-tool source.
-- [`src/`](src): future Luau runtime source.
+- [`tooling/`](tooling): repository development tools, run through Lune and excluded from framework/runtime packages.
+- [`src/framework/`](src/framework): future portable, pure-Luau framework package.
+- [`src/runtime/`](src/runtime): future Roblox-only runtime package, which may depend on `src/framework/`.
 - [`examples/`](examples): future end-to-end examples.
 - [`example.project.json`](example.project.json): intentionally blank Rojo example scaffold.
 - [`package.project.json`](package.project.json): intentionally blank Rojo package scaffold.
@@ -57,16 +58,34 @@ These decisions must be designed together so that the intermediate boundary is s
 
 ## Development scaffold
 
-The repository currently retains Rojo and StyLua infrastructure only:
+The repository retains Rojo and StyLua, plus a project-owned Luau naming analyzer with a thin VS Code diagnostics adapter:
 
 ```sh
 aftman install
 stylua --check src examples tooling
+lune run tooling/naming/cli.luau check src examples tooling
 rojo build example.project.json --output bundle-framework-example.rbxlx
 rojo build package.project.json --output bundle-framework.rbxm
 ```
 
 The Rojo projects contain no source mappings until the replacement systems are implemented.
+
+Open one of the dedicated VS Code workspaces for Luau-LSP rather than opening the repository folder directly:
+
+- `bundle-framework-tooling.code-workspace` analyzes repository tools as standard Luau;
+- `bundle-framework-framework.code-workspace` analyzes portable framework code as standard Luau; and
+- `bundle-framework-runtime.code-workspace` analyzes Roblox runtime code with Roblox types.
+
+All framework, runtime, and tool-internal imports use relative string paths such as `require("./Module")` and `require("../Package")`; do not append `.luau`. A directory import resolves its `init.luau`. Luau-LSP cannot use the Roblox and standard platforms in the same VS Code window, so open these workspaces in separate windows when working across boundaries.
+
+To enable live naming diagnostics in VS Code, package and install the local adapter once after running `aftman install`:
+
+```sh
+cd editors/vscode
+npm install
+npx vsce package --no-dependencies --out bundle-framework-naming.vsix
+code --install-extension bundle-framework-naming.vsix --force
+```
 
 ## License
 

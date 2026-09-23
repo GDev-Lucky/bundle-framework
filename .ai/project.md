@@ -3,7 +3,7 @@
 - importance: 0.98
 - confidence: 1.0
 - createdAt: 2026-09-21T00:00:00Z
-- lastUsedAt: 2026-09-22T00:00:00Z
+- lastUsedAt: 2026-09-23T00:00:00Z
 
 ## Confirmed
 
@@ -13,16 +13,20 @@
 - Framework consumers will install the shared core, authoring-time tooling, and runtime as Luau source in their projects.
 - The VS Code extension and Studio plugin will be thin hosts for the project's Luau tooling. They translate platform events, expose explicit native capabilities, and apply platform-specific results.
 - Rojo filesystem-to-Studio synchronization is the supported development workflow for shared source. Rojo-managed scripts are authored on disk; tooling is excluded from production mappings.
-- `src/`, `examples/`, and `tooling/` are intentionally empty scaffold directories.
-- Stack currently retained: Roblox, strict Luau when runtime code is added, Rojo, Git, Aftman, and StyLua. Selene is removed.
-- `example.project.json` and `package.project.json` are intentionally blank but valid Rojo scaffolds.
+- `tooling/` contains repository development tools. It may use Lune host APIs but is excluded from framework/runtime packages and production Rojo mappings.
+- `src/framework/` is the portable, pure-Luau framework root. It may not use Roblox APIs, services, `Instance`, `task`, Lune APIs, or `src/runtime/`.
+- `src/runtime/` is the Roblox-only runtime root. It may use Roblox APIs and may depend on `src/framework/`; dependencies do not flow in the other direction.
+- Dedicated VS Code workspace files isolate Luau-LSP analysis: tooling and framework use the standard platform, and runtime uses the Roblox platform. They must be opened in separate windows because Luau-LSP selects one platform per window.
+- Internal package imports use relative string paths with `/`, `./` or `../`, no `.luau` suffix, and directory resolution through `init.luau`.
+- Stack currently retained: Roblox, strict Luau when runtime code is added, Rojo, Git, Aftman, StyLua, and Lune for portable authoring-tool execution. Selene is removed.
+- `example.project.json` and `package.project.json` are currently deleted in the working tree, so Rojo build validation is blocked until project files are restored or replaced.
 
 ## Architecture Boundary
 
 - The external tool is the authoritative authoring-time analysis layer.
 - The intermediate representation must be simple, deterministic, and validated before runtime consumption.
 - The Luau runtime must not repeat project discovery, dependency analysis, import resolution, or authoring-time type generation.
-- Shared core and tooling must use platform-neutral, serializable inputs and results; they must not directly depend on VS Code, Node.js, Roblox services, `Instance`, or `plugin` values.
+- Shared framework code must use platform-neutral, serializable inputs and results; it must not directly depend on VS Code, Node.js, Roblox services, `Instance`, `plugin`, or Lune values.
 - Dependency-first acyclic composition, narrow public boundaries, explicit ownership, and server authority remain framework principles.
 - Bundles will use framework-only dependency declarations that are removed from generated runtime output. Authoring may later provide a custom Studio widget or visual editor, but the exact syntax and storage are not implemented.
 - Bundle scripts will distinguish explicit entries, private modules, and public APIs, with `server` and `shared` realms. Server code may consume server or shared code; shared code may consume shared code only.
@@ -36,9 +40,9 @@
 
 - No external tool, host capability contract, intermediate schema, runtime API, loader, lifecycle, dependency resolution, networking, or client asset exposure is implemented yet.
 - The removed `manifest()` / `define()` / `bundle.require()` static API is not current or supported.
-- Package layout, capability names, CLI, configuration, generated-output location, intermediate serialization, and runtime lifecycle require separate design decisions.
+- Exact Rojo project topology, capability names, CLI, generated-output location, intermediate serialization, and runtime lifecycle require separate design decisions. Per-root strict `.luaurc` files and dedicated Luau-LSP workspace platform settings are configured.
 
 ## Workflow
 
-- Run `aftman install`, StyLua checks for applicable source directories, and both basic Rojo builds before publishing changes.
+- Run `aftman install`, StyLua and naming checks for applicable source directories, and both basic Rojo builds when Rojo project files are available before publishing changes.
 - Maintain only compact framework-specific AI memory under `.ai/`.

@@ -1,0 +1,15 @@
+{
+    "folders": [
+        {
+            "name": "framework",
+            "path": "src/framework"
+        }
+    ],
+    "settings": {
+        "luau-lsp.platform.type": "standard",
+        "luau-lsp.completion.imports.requireStyle": "alwaysRelative",
+        "luau-lsp.sourcemap.enabled": false,
+        "bundleFramework.naming.enabled": true,
+        "bundleFramework.naming.lunePath": "lune"
+    }
+}

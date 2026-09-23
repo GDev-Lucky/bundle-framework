@@ -1,0 +1,15 @@
+{
+    "folders": [
+        {
+            "name": "runtime",
+            "path": "src/runtime"
+        }
+    ],
+    "settings": {
+        "luau-lsp.platform.type": "roblox",
+        "luau-lsp.completion.imports.requireStyle": "alwaysRelative",
+        "luau-lsp.sourcemap.enabled": false,
+        "bundleFramework.naming.enabled": true,
+        "bundleFramework.naming.lunePath": "lune"
+    }
+}
