@@ -2,14 +2,14 @@
 
 ## Current scope
 
-This repository is an architectural scaffold for an external development tool and a Luau runtime. It does not currently implement the tool, an intermediate representation, dependency resolution, lifecycle execution, networking, client asset exposure, or a public runtime API.
+This repository is an early implementation of an external development tool and a Luau runtime direction. The portable framework baseline, JSON snapshot protocol, and Windows x64 standalone Lune host build exist; the public tool contract, intermediate representation, dependency resolution, lifecycle execution, networking, client asset exposure, and public runtime API remain incomplete.
 
 Do not restore or document the removed `manifest()` / `define()` / `bundle.require()` API as current behavior.
 
 ## Development setup
 
 1. Install Aftman and run `aftman install` from the repository root.
-2. Run the **Format check**, **Naming check**, **Build example**, and **Build package** VS Code tasks before opening a pull request.
+2. Run the **Format check**, **Naming check**, **build-lune-windows**, **Build example**, and **Build package** VS Code tasks applicable to your changes before opening a pull request.
 3. Keep authoring-time responsibilities in the external tool and runtime-only behavior in Luau.
 
 ## Source boundaries and imports
@@ -20,7 +20,7 @@ Do not restore or document the removed `manifest()` / `define()` / `bundle.requi
 - `src/framework/` must not depend on `src/runtime/`; dependencies flow from runtime to framework only.
 - Use relative string `require()` paths with forward slashes and no `.luau` suffix. `./Directory` resolves through `./Directory/init.luau`.
 
-Use the matching `bundle-framework-*.code-workspace` file for Luau-LSP. The framework and tooling workspaces use the standard platform; the runtime workspace uses the Roblox platform. They must be opened in separate VS Code windows because Luau-LSP selects one platform per window.
+Use the matching `tooling.code-workspace`, `framework.code-workspace`, or `runtime.code-workspace` file for Luau-LSP. The framework and tooling workspaces use the standard platform; the runtime workspace uses the Roblox platform. They must be opened in separate VS Code windows because Luau-LSP selects one platform per window.
 
 ## Luau naming conventions
 
@@ -44,6 +44,13 @@ StyLua remains responsible for formatting, and Luau-LSP remains responsible for 
 - Keep client asset exposure fail-closed: authoring-time provenance determines eligible generated grants, while all delivery authorization and revocation remain server-owned.
 - Treat client-delivered code and assets as inspectable; do not place critical logic, secrets, or authoritative decisions in client-visible output.
 - Document durable architectural decisions in `.ai/decision/` when the repository workflow applies.
+
+## Windows Lune host distribution
+
+- `tooling/lune/main.luau` is the current Lune host entry point. It reads a JSON snapshot from standard input and constructs the portable framework through `SnapshotProtocol`; it does not yet expose a stable public result protocol.
+- Run `tooling/lune/build-windows.ps1`, or the **build-lune-windows** VS Code task, after `aftman install` to create `bin/lune-main.exe` for `windows-x86_64`.
+- The build uses project-pinned DarkLua to bundle relative imports and keeps `@lune/**` imports for Lune's standalone host. `bin/lune-main.luau` and `bin/lune-main.exe` are generated, untracked host-distribution artifacts.
+- Do not treat this executable as the finalized framework CLI, runtime generator, or Roblox deployment mechanism. Update documentation and the durable distribution decision whenever its host interface or release ownership changes.
 
 ## Pull requests
 

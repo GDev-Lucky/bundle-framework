@@ -5,7 +5,7 @@ Bundle Framework is being reset as a two-part Roblox framework:
 - A project-installed **Luau authoring tool** owns authoring-time analysis and generation, hosted by thin VS Code and Roblox Studio integrations.
 - A **Luau runtime** consumes the tool's generated intermediate representation inside Roblox.
 
-> **Status:** architectural scaffold. The prior Luau-only static API has been removed. The external tool, intermediate representation, and replacement runtime are not implemented yet.
+> **Status:** early implementation. The prior Luau-only static API remains removed. A portable framework baseline, JSON snapshot input, and a Windows x64 standalone Lune host artifact are implemented; the authoring tool contract, intermediate representation, and Roblox runtime remain in design.
 
 ## Direction
 
@@ -37,9 +37,9 @@ The systems below are confirmed architecture, **not implemented APIs**.
 
 ## Repository layout
 
-- [`tooling/`](tooling): repository development tools, run through Lune and excluded from framework/runtime packages.
-- [`src/framework/`](src/framework): future portable, pure-Luau framework package.
-- [`src/runtime/`](src/runtime): future Roblox-only runtime package, which may depend on `src/framework/`.
+- [`tooling/`](tooling): repository development tools and the Lune host entry point, excluded from framework/runtime packages.
+- [`src/framework/`](src/framework): portable, pure-Luau baseline containing the framework, workspace, protocol abstraction, snapshot protocol, and signal utility.
+- [`src/runtime/`](src/runtime): reserved Roblox-only runtime package, which may depend on `src/framework/`.
 - [`examples/`](examples): future end-to-end examples.
 - [`example.project.json`](example.project.json): intentionally blank Rojo example scaffold.
 - [`package.project.json`](package.project.json): intentionally blank Rojo package scaffold.
@@ -48,11 +48,11 @@ The systems below are confirmed architecture, **not implemented APIs**.
 
 The following are deliberately not specified or implemented yet:
 
-- the external tool's implementation language, command-line interface, and configuration format;
+- the external tool's public command-line interface and configuration format;
 - the exact package layout and host capability contract;
 - the exact intermediate-representation schema and serialization format;
 - the runtime's public Luau API, entry lifecycle model, asset-policy syntax, and replication transport; and
-- generated-file locations, ownership, and deployment workflow.
+- generated runtime-output locations, ownership, and deployment workflow.
 
 These decisions must be designed together so that the intermediate boundary is stable, simple, and sufficient for runtime needs.
 
@@ -64,17 +64,24 @@ The repository retains Rojo and StyLua, plus a project-owned Luau naming analyze
 aftman install
 stylua --check src examples tooling
 lune run tooling/naming/cli.luau check src examples tooling
+./tooling/lune/build-windows.ps1
 rojo build example.project.json --output bundle-framework-example.rbxlx
 rojo build package.project.json --output bundle-framework.rbxm
 ```
 
-The Rojo projects contain no source mappings until the replacement systems are implemented.
+### Windows Lune host artifact
+
+`tooling/lune/build-windows.ps1` is the reproducible Windows x64 host build. It first bundles project-relative Luau imports from `tooling/lune/main.luau` with DarkLua, while preserving `@lune/**` imports for the Lune host, then invokes Lune's standalone builder. The same command is available as the VS Code **build-lune-windows** task.
+
+After a successful build, distribute `bin/lune-main.exe` to the Windows VS Code host together with the host integration that invokes it. `bin/lune-main.luau` is an intermediate resolved bundle retained for inspection; both files are generated and intentionally ignored by Git. Build artifacts are host-distribution inputs only: they do not define the eventual public CLI, generated runtime-output layout, or production Roblox deployment contract.
+
+The current executable reads a JSON snapshot from standard input, constructs `SnapshotProtocol` and `Framework`, and does not yet emit a public result. Its input/output interface is therefore provisional and must evolve with the authoring-tool contract.
 
 Open one of the dedicated VS Code workspaces for Luau-LSP rather than opening the repository folder directly:
 
-- `bundle-framework-tooling.code-workspace` analyzes repository tools as standard Luau;
-- `bundle-framework-framework.code-workspace` analyzes portable framework code as standard Luau; and
-- `bundle-framework-runtime.code-workspace` analyzes Roblox runtime code with Roblox types.
+- `tooling.code-workspace` analyzes repository tools as standard Luau;
+- `framework.code-workspace` analyzes portable framework code as standard Luau; and
+- `runtime.code-workspace` analyzes Roblox runtime code with Roblox types.
 
 All framework, runtime, and tool-internal imports use relative string paths such as `require("./Module")` and `require("../Package")`; do not append `.luau`. A directory import resolves its `init.luau`. Luau-LSP cannot use the Roblox and standard platforms in the same VS Code window, so open these workspaces in separate windows when working across boundaries.
 

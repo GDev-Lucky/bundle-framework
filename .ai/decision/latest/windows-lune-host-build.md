@@ -1,0 +1,3 @@
+# Latest Windows Lune Host Build Decision
+
+- [`2026-09-24-001-windows-lune-host-build-distribution.md`](../2026-09-24-001-windows-lune-host-build-distribution.md): bundle `tooling/lune/main.luau` with DarkLua, retain Lune host imports, and build ignored `bin/lune-main.exe` for `windows-x86_64`; the artifact is a provisional Windows host-distribution input rather than the final public CLI or runtime deployment contract.
