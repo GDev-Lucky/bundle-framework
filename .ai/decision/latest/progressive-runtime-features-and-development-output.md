@@ -1,0 +1,3 @@
+# Latest Progressive Runtime Features and Development Output Decision
+
+- [`2026-09-24-003-progressive-runtime-features-and-structured-development-output.md`](../2026-09-24-003-progressive-runtime-features-and-structured-development-output.md): ordinary Roblox/Luau APIs remain valid; compiler-aware assets, generated placement, managed client delivery, typed primitives, and structured development output are additive, independently configurable directions.

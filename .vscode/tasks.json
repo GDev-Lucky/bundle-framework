@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build-lune-windows",
+            "label": "Build project...",
             "type": "process",
             "command": "powershell.exe",
             "args": [
@@ -10,10 +10,18 @@
                 "-ExecutionPolicy",
                 "Bypass",
                 "-File",
-                "${workspaceFolder}\\tooling\\lune\\build-windows.ps1"
+                "${workspaceFolder}\\tooling\\build.ps1"
             ],
             "problemMatcher": [],
-            "group": "build"
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            }
         },
         {
             "label": "Format check",
@@ -23,12 +31,12 @@
             "problemMatcher": []
         },
         {
-            "label": "Naming check",
+            "label": "Lint check",
             "type": "shell",
-            "command": "lune",
-            "args": ["run", "tooling/naming/cli.luau", "check", "src", "examples", "tooling"],
+            "command": "npm",
+            "args": ["run", "check"],
             "problemMatcher": {
-                "owner": "bundle-framework-naming",
+                "owner": "bundle-framework-linter",
                 "fileLocation": ["relative", "${workspaceFolder}"],
                 "pattern": {
                     "regexp": "^(.*):(\\d+):(\\d+): (.*) \\[(.*)\\]$",
@@ -38,21 +46,12 @@
                     "message": 4,
                     "code": 5
                 }
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
             }
-        },
-        {
-            "label": "Build example",
-            "type": "shell",
-            "command": "rojo",
-            "args": ["build", "example.project.json", "--output", "bundle-framework-example.rbxlx"],
-            "problemMatcher": []
-        },
-        {
-            "label": "Build package",
-            "type": "shell",
-            "command": "rojo",
-            "args": ["build", "package.project.json", "--output", "bundle-framework.rbxm"],
-            "problemMatcher": []
         }
     ]
 }

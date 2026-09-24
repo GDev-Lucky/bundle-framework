@@ -1,10 +1,9 @@
 # AGENTS.md
 
 ## Project
-
 - Direction: an external authoring/development tool produces a simple intermediate representation consumed by a Luau runtime.
-- Current state: architectural scaffold. `tooling/` contains repository development tools; `src/framework/` and `src/runtime/` are intentionally implementation-free package roots.
-- Retained tooling: Roblox, strict Luau when runtime code is added, Rojo, Git, Aftman, and StyLua.
+- Current state: early implementation. `src/framework/` has a portable protocol/workspace baseline; `src/runtime/` remains reserved; `tooling/` contains the manifest-driven builder, Lune host, and project linter.
+- Retained stack: Roblox, strict Luau, Rojo, Git, Aftman, StyLua, Lune, PowerShell, npm, and TypeScript for thin host adapters.
 
 - Treat source and tool configuration as authoritative; inspect relevant files before editing.
 - Preserve a narrow tool-to-runtime boundary. The external tool owns discovery, dependency enforcement, import processing, and type/editor analysis. The runtime consumes generated output and performs Roblox-only behavior.
@@ -34,7 +33,6 @@
 
 ## Rules
 
-- When the user makes a request in Plan mode, fully investigate and plan all changes needed, then ask the user to toggle to Act mode before implementation.
 - Keep public examples generic; do not add unrelated application details or private history.
 - Do not edit `src/` unless explicitly asked by the user. AI memory may be updated when needed to preserve the workflow.
 - Follow the Memory Workflow and Token Discipline sections for every repository task.

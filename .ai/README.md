@@ -1,19 +1,25 @@
 # Project Memory
 
-Persistent, compact context for work on this public Bundle Framework repository. Source code and configuration remain authoritative.
+Compact, persistent context for Bundle Framework work. Source and configuration are authoritative; memory helps readers find the smallest useful slice of that source.
 
-## Index
+## Start Here
 
-- [`config.psd1`](config.psd1): retrieval and archive settings.
-- [`project.md`](project.md): confirmed repository facts and API boundary.
-- [`decision/README.md`](decision/README.md): durable public decision policy.
-- [`guides/README.md`](guides/README.md): maintained cross-cutting guidance.
-- [`summaries/README.md`](summaries/README.md): implemented-source navigation summaries.
-- [`tasks/README.md`](tasks/README.md): task record lifecycle.
-- [`tasks/current.md`](tasks/current.md): active or most recent task.
-- [`tools/`](tools): archive, retrieval, and workflow-validation scripts.
+1. Read [`tasks/current.md`](tasks/current.md) and its linked task.
+2. Run [`tools/archive-tasks.ps1`](tools/archive-tasks.ps1).
+3. Read [`project.md`](project.md), then retrieve only task-relevant context.
+4. Verify memory claims against source before changing them.
 
-## Retrieval Limits
+## Memory Map
+
+- [`project.md`](project.md) — current state, boundaries, and unresolved contracts.
+- [`decision/latest.md`](decision/latest.md) — routes to current durable decisions.
+- [`guides/README.md`](guides/README.md) — maintained cross-cutting practices.
+- [`summaries/README.md`](summaries/README.md) — compact maps of implemented systems.
+- [`tasks/README.md`](tasks/README.md) — task lifecycle and history.
+- [`config.psd1`](config.psd1) — retrieval and archival settings.
+- [`tools/`](tools) — retrieval, archival, and validation scripts.
+
+## Retrieval Budget
 
 Use a 6,000-token soft limit and an 8,000-token hard limit. The default runtime-output limit is 1,500 estimated tokens.
 
@@ -26,17 +32,11 @@ Use a 6,000-token soft limit and an 8,000-token hard limit. The default runtime-
 | Code | 3,000 |
 | **Total** | **8,000** |
 
-Retrieve only information that materially affects the current public-framework task. Do not store or import unrelated application details, private history, or speculative runtime architecture.
+Treat these limits as ceilings. Search before broad reads, prefer [`tools/retrieve-context.ps1`](tools/retrieve-context.ps1) when it reduces context, and stop when evidence is sufficient.
 
-## Memory Units
+## Record Policy
 
-Each `project.md`, dated decision, dated task, guide, and summary requires `importance`, `confidence`, `createdAt`, and `lastUsedAt` metadata. Use ISO-8601 UTC timestamps. Record durable decisions and concise task outcomes; do not duplicate source code or routine tool output.
-
-## Workflow
-
-1. Read the active task and run `tools/archive-tasks.ps1`.
-2. Search before broad reads; batch independent operations and stop when evidence is sufficient.
-3. When prior context is needed, prefer `tools/retrieve-context.ps1` over manually loading multiple memory files.
-4. Keep plans, progress updates, task records, and final responses concise; summarize routine output instead of reproducing it.
-5. Keep task and current-task records synchronized.
-6. Run `tools/validate-workflow.ps1` after changing `AGENTS.md` or `.ai/`.
+- `project.md`, dated decisions, dated tasks, guides, and summaries require `importance`, `confidence`, `createdAt`, and `lastUsedAt` metadata in ISO-8601 UTC.
+- Keep records factual, compact, and linked to authoritative source paths.
+- Record durable decisions and task outcomes; do not duplicate source, speculative APIs, or routine command output.
+- Keep [`tasks/current.md`](tasks/current.md) synchronized and run [`tools/validate-workflow.ps1`](tools/validate-workflow.ps1) after changing `AGENTS.md` or `.ai/`.

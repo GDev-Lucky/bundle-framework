@@ -60,22 +60,25 @@ These decisions must be designed together so that the intermediate boundary is s
 
 ## Development scaffold
 
-The repository retains Rojo and StyLua, plus a project-owned Luau naming analyzer with a thin VS Code diagnostics adapter:
+The repository retains Rojo and StyLua, plus a project-owned Luau linter with a thin VS Code diagnostics adapter:
 
 ```sh
 aftman install
+npm install
+npm run build
 stylua --check src examples tooling
-lune run tooling/naming/cli.luau check src examples tooling
-./tooling/lune/build-windows.ps1
+npm run check
 rojo build example.project.json --output bundle-framework-example.rbxlx
 rojo build package.project.json --output bundle-framework.rbxm
 ```
 
 ### Windows Lune host artifact
 
-`tooling/lune/build-windows.ps1` is the reproducible Windows x64 host build. It first bundles project-relative Luau imports from `tooling/lune/main.luau` with DarkLua, while preserving `@lune/**` imports for the Lune host, then invokes Lune's standalone builder. The same command is available as the VS Code **build-lune-windows** task.
+`tooling/build.ps1` is the manifest-driven build entry point. Every buildable project owns one adjacent `build.luau` that declares its Luau entries, VS Code extension roots, and supported native platforms. The script recursively discovers those manifests, bundles entries with DarkLua, and invokes Lune for each selected platform.
 
-After a successful build, distribute `bin/lune-main.exe` to the Windows VS Code host together with the host integration that invokes it. `bin/lune-main.luau` is an intermediate resolved bundle retained for inspection; both files are generated and intentionally ignored by Git. Build artifacts are host-distribution inputs only: they do not define the eventual public CLI, generated runtime-output layout, or production Roblox deployment contract.
+Use `powershell.exe -NoProfile -ExecutionPolicy Bypass -File tooling/build.ps1` without arguments to select a discovered project, operation, and platform interactively. Automation can pass positional arguments, such as `tooling/build.ps1 tooling/lune luau windows-x86_64` or `tooling/build.ps1 tooling/linter test`. If no platform is supplied, every platform listed in the selected manifest is compiled.
+
+After a successful Lune-host build, distribute `build/bin/windows-x86_64/tooling/lune/main.exe` to the Windows host integration that invokes it. `build/luau/tooling/lune/main.luau` is an intermediate resolved bundle retained for inspection; both files are generated and intentionally ignored by Git. Build artifacts are host-distribution inputs only: they do not define the eventual public CLI, generated runtime-output layout, or production Roblox deployment contract.
 
 The current executable reads a JSON snapshot from standard input, constructs `SnapshotProtocol` and `Framework`, and does not yet emit a public result. Its input/output interface is therefore provisional and must evolve with the authoring-tool contract.
 
@@ -87,14 +90,14 @@ Open one of the dedicated VS Code workspaces for Luau-LSP rather than opening th
 
 All framework, runtime, and tool-internal imports use relative string paths such as `require("./Module")` and `require("../Package")`; do not append `.luau`. A directory import resolves its `init.luau`. Luau-LSP cannot use the Roblox and standard platforms in the same VS Code window, so open these workspaces in separate windows when working across boundaries.
 
-To enable live naming diagnostics in VS Code, package and install the local adapter once after running `aftman install`:
+To enable live lint diagnostics in VS Code, install the bundled Windows x64 linter extension after running `aftman install`:
 
 ```sh
-cd editors/vscode
 npm install
-npx vsce package --no-dependencies --out bundle-framework-naming.vsix
-code --install-extension bundle-framework-naming.vsix --force
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File tooling/build.ps1 tooling/linter test
 ```
+
+The repository uses npm workspaces, so run `npm install` once from the root. The VS Code adapter is authored in strict TypeScript and compiles to `build/js/`; resolved Luau is written under `build/luau/`, native artifacts under `build/bin/<platform>/`, and installable extensions to `build/vsix/`. `npm run build` runs the complete recursive build, while `tooling/build.ps1 tooling/linter test` builds, packages, and installs `build/vsix/bundle-framework-linter.vsix`. The package includes its private `bin/cli.exe`, so installed copies do not require Lune or repository source at editor runtime. Reload the VS Code window after installation to activate the new extension version.
 
 ## License
 

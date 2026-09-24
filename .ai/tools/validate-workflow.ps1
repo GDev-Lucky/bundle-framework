@@ -246,6 +246,28 @@ foreach ($requiredRule in $requiredAgentRules) {
         Add-ValidationError "AGENTS.md is missing required token-discipline rule: $requiredRule"
     }
 }
+
+$clineModeRulePath = Join-Path $root ".clinerules\mode-workflow.md"
+if (-not (Test-Path $clineModeRulePath)) {
+    Add-ValidationError ".clinerules/mode-workflow.md is missing"
+} else {
+    $clineModeRuleText = Get-Text $clineModeRulePath
+    $requiredClineModeRules = @(
+        '## Plan Mode',
+        'Treat Plan mode as read-only.',
+        'switch to Act mode',
+        '## Act Mode',
+        'switch to Plan mode',
+        'explicit permission',
+        'necessary to complete an explicitly requested implementation'
+    )
+    foreach ($requiredRule in $requiredClineModeRules) {
+        if (-not $clineModeRuleText.Contains($requiredRule)) {
+            Add-ValidationError ".clinerules/mode-workflow.md is missing required mode-gate rule: $requiredRule"
+        }
+    }
+}
+
 $readmeText = Get-Text (Join-Path $root ".ai\README.md")
 $categoryNames = @("Project", "Architecture", "Decisions", "Previous Work", "Code")
 $categoryTotal = 0

@@ -76,11 +76,11 @@ elseif command == "check" then
 	end
 
 	if count > 0 then
-		stdio.ewrite(string.format("Naming check failed with %d diagnostic(s).\n", count))
+		stdio.ewrite(string.format("Lint check failed with %d diagnostic(s).\n", count))
 		process.exit(1)
 	end
-	stdio.write(string.format("Naming check passed for %d Luau file(s).\n", #files))
+	stdio.write(string.format("Lint check passed for %d Luau file(s).\n", #files))
 else
-	stdio.ewrite("Usage: lune run tooling/naming/cli.luau <document|check> [paths...]\n")
+	stdio.ewrite("Usage: lune run tooling/linter/cli.luau <document|check> [paths...]\n")
 	process.exit(2)
 end

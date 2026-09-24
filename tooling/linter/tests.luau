@@ -50,4 +50,4 @@ assert(table.find(invalidCodes, "naming/parameter") ~= nil)
 assert(table.find(invalidCodes, "naming/type") ~= nil)
 assert(table.find(invalidCodes, "naming/file") ~= nil)
 
-print("Naming analyzer tests passed")
+print("Linter tests passed")

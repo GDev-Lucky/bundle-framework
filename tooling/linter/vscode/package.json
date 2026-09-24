@@ -1,0 +1,50 @@
+{
+    "name": "bundle-framework-linter",
+    "displayName": "Bundle Framework Linter",
+    "description": "Live Luau lint diagnostics from the bundled Bundle Framework linter executable.",
+    "version": "0.1.0",
+    "publisher": "bundle-framework",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Lucky/bundle-framework"
+    },
+    "engines": {
+        "vscode": "^1.82.0"
+    },
+    "categories": [
+        "Linters"
+    ],
+    "files": [
+        "bin/cli.exe",
+        "extension.js",
+        "package.json",
+        "LICENSE"
+    ],
+    "activationEvents": [
+        "onLanguage:luau"
+    ],
+    "main": "./extension.js",
+    "contributes": {
+        "configuration": {
+            "title": "Bundle Framework Linter",
+            "properties": {
+                "bundleFramework.linter.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Publish project lint diagnostics while editing Luau files."
+                }
+            }
+        }
+    },
+    "scripts": {
+        "build": "tsc --project tsconfig.json",
+        "check": "tsc --project tsconfig.json --noEmit"
+    },
+    "devDependencies": {
+        "@types/node": "18.19.130",
+        "@types/vscode": "1.82.0",
+        "@vscode/vsce": "4.0.0",
+        "typescript": "5.9.3"
+    }
+}

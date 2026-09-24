@@ -7,10 +7,15 @@ on:
 
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
       - uses: ok-nick/setup-aftman@v0.4.2
       - run: aftman install
       - run: stylua --check src examples tooling
-      - run: lune run tooling/naming/cli.luau check src examples tooling
+      - run: npm run check

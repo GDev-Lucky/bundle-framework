@@ -9,7 +9,20 @@
         "luau-lsp.platform.type": "standard",
         "luau-lsp.completion.imports.requireStyle": "alwaysRelative",
         "luau-lsp.sourcemap.enabled": false,
-        "bundleFramework.naming.enabled": true,
-        "bundleFramework.naming.lunePath": "lune"
+        "bundleFramework.linter.enabled": true
+    },
+    "tasks": {
+        "version": "2.0.0",
+        "tasks": [
+            {
+                "label": "Build project...",
+                "type": "process",
+                "command": "powershell.exe",
+                "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}/build.ps1"],
+                "problemMatcher": [],
+                "group": { "kind": "build", "isDefault": true },
+                "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+            }
+        ]
     }
 }

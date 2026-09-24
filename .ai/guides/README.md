@@ -1,9 +1,9 @@
 # Project Guides
 
-Maintained, compact cross-cutting guidance. Read only applicable entries and verify claims against source.
+Maintained practices that apply across systems. Read only the guide relevant to the task and verify technical claims against source.
 
-## Index
+## Guides
 
-No maintained guides exist while the external-tool and runtime contracts are still unimplemented.
+- [Documentation style](documentation-style.md) — concise, source-backed writing and navigation conventions.
 
 Each guide must include memory metadata, Scope, Guidance, Rationale, References, Update Triggers, and Last Verified.

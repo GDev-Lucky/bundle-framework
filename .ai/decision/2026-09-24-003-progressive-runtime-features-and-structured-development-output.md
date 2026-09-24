@@ -1,0 +1,21 @@
+# Decision: Progressive Runtime Features and Structured Development Output
+
+- Date: 2026-09-24
+- Topic: Native Roblox interoperability, opt-in managed features, generated placement, and development output
+- Decision: Bundle Framework must preserve ordinary Roblox/Luau usage. Developers may directly access services and Instances, such as `ReplicatedStorage` assets and `FindFirstChild`, without using framework asset APIs or managed delivery. Compiler-aware APIs are additive opt-ins: `asset()` enables typed asset lookup and, when selected, compiler-assisted server-authoritative asset exposure; direct Roblox access remains unmanaged. Asset operation must support independently selectable unmanaged/pass-through, preload-all, manual grant/revocation, and compiler-managed exposure modes. Generated client-script placement, client-code delivery/entry authorization, and asset exposure are separate configurable concerns. A future host may generate a conventional DataModel layout and bootstrap client entries automatically, including a configurable `ReplicatedFirst` placement, while respecting explicit Rojo/Studio ownership. The framework direction includes ergonomic typed primitives for networking, local events/signals, registries, and generated project-wide type aggregation; exact public APIs and syntax remain design work. Development helpers in the direction of `info`, `warn`, `debug`, `benchmark`, and error-level reporting should preserve normal development output while emitting structured, versioned diagnostic events for optional development-tool views. Production/development builds may selectively retain, route, or strip such instrumentation, but stripping must not change user-program behavior.
+- Reason: Gradual adoption lets projects retain familiar Roblox workflows while using compiler features only where their validation, generated types, optimization, or security model is valuable. Separating placement, delivery, and assets prevents a simple generated client layout from forcing managed client code or asset exposure. Structured events give development tools richer filtering, source navigation, and timing data than formatted console text while leaving Roblox Output useful. Build transformations must preserve semantics so observability features do not introduce hidden production differences.
+- importance: 0.98
+- confidence: 0.96
+- createdAt: 2026-09-24T00:00:00Z
+- lastUsedAt: 2026-09-24T00:00:00Z
+
+## Consequences
+
+- Native service and Instance access is valid bundle code within existing realm and dependency boundaries; it does not receive compiler-managed asset eligibility or generated asset typing unless it enters an explicit framework contract.
+- `asset()` is an opt-in compiler-recognized boundary. Its exact lookup syntax, asset index schema, inferred dynamic-key behavior, policy syntax, and generated runtime representation remain implementation work.
+- Automatic client placement must be configurable independently from whether all client entries are statically available or are selectively authorized per player. Generated paths and bootstrap APIs are not decided by this record.
+- A Rojo-owned project remains filesystem-authoritative. Any generated layout is created or updated through the filesystem/Lune host, while the Studio plugin remains read-only. Studio-owned projects may use declared plugin DataModel capabilities.
+- Networking and local event/signal primitives must make their execution/trust boundaries clear. Generated codecs and server validation remain required for client-to-server networking.
+- Project-wide registry aggregation and cross-bundle inferred types require compiler-generated type information and deterministic conflict, visibility, dependency, and realm rules; they are not ordinary local Luau type-function behavior.
+- Diagnostic helpers must not redefine or silently change the semantics of Luau's built-in throwing `error()` without an explicit future API decision. Structured events, source mappings, UI protocol, transport, retention, and production defaults remain design work.
+- Production stripping may only remove instrumentation when argument evaluation and other observable behavior are preserved; lazy or compiler-recognized instrumentation forms may be necessary.

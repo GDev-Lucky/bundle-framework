@@ -1,0 +1,5 @@
+return {
+	entries = {},
+	extensions = {},
+	platforms = {},
+}

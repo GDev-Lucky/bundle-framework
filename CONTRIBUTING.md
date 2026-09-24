@@ -9,8 +9,9 @@ Do not restore or document the removed `manifest()` / `define()` / `bundle.requi
 ## Development setup
 
 1. Install Aftman and run `aftman install` from the repository root.
-2. Run the **Format check**, **Naming check**, **build-lune-windows**, **Build example**, and **Build package** VS Code tasks applicable to your changes before opening a pull request.
-3. Keep authoring-time responsibilities in the external tool and runtime-only behavior in Luau.
+2. Run `npm install` from the repository root when working on JavaScript tooling. npm workspaces install dependencies into the shared root `node_modules/`; each workspace must still declare the dependencies it owns.
+3. Run the **Build project...**, **Format check**, and **Lint check** VS Code tasks applicable to your changes before opening a pull request. **Build project...** discovers every `build.luau` manifest automatically, so do not add fixed tasks for new tools.
+4. Keep authoring-time responsibilities in the external tool and runtime-only behavior in Luau.
 
 ## Source boundaries and imports
 
@@ -24,7 +25,7 @@ Use the matching `tooling.code-workspace`, `framework.code-workspace`, or `runti
 
 ## Luau naming conventions
 
-The project follows default Roblox Luau naming conventions, enforced by the project-owned analyzer in `tooling/naming/`:
+The project follows default Roblox Luau naming conventions, enforced by the project-owned linter in `tooling/linter/`:
 
 - local variables, functions, parameters, loop variables, and members use `camelCase`;
 - private names may use `_camelCase`;
@@ -33,7 +34,13 @@ The project follows default Roblox Luau naming conventions, enforced by the proj
 - module/class table bindings and `require()` imports may use `PascalCase`; and
 - Luau filenames use `camelCase` or `PascalCase`, except `init.luau`.
 
-StyLua remains responsible for formatting, and Luau-LSP remains responsible for type and built-in Luau diagnostics. Selene is not used. The thin VS Code adapter runs the same Luau analyzer while a document is edited. The corresponding CI command is `lune run tooling/naming/cli.luau check src examples tooling`.
+StyLua remains responsible for formatting, and Luau-LSP remains responsible for type and built-in Luau diagnostics. Selene is not used. The thin VS Code adapter in `tooling/linter/vscode/` invokes its bundled Windows x64 linter executable while a document is edited. The corresponding local and CI check is `npm run check`, which builds and executes the compiled linter binary rather than running the source CLI.
+
+## Windows linter extension distribution
+
+- Run `npm install` once at the repository root. `tooling/build.ps1 <path> <luau|extension|complete|test> [platform]` discovers manifests and extensions recursively. Each buildable project has one `build.luau` listing entries, extension roots, and supported platforms.
+- `tooling/build.ps1 tooling/linter test` builds the linter executable, compiles and packages its VS Code adapter, and installs `build/vsix/bundle-framework-linter.vsix`. The installed extension resolves its private copy through `context.asAbsolutePath("bin/cli.exe")`; it must not depend on a user-installed Lune binary.
+- The VS Code **Build project...** task runs the same script interactively. Reload the VS Code window before manually exercising new extension code.
 
 ## Architecture contributions
 
@@ -51,8 +58,8 @@ StyLua remains responsible for formatting, and Luau-LSP remains responsible for 
 ## Windows Lune host distribution
 
 - `tooling/lune/main.luau` is the current Lune host entry point. It reads a JSON snapshot from standard input and constructs the portable framework through `SnapshotProtocol`; it does not yet expose a stable public result protocol.
-- Run `tooling/lune/build-windows.ps1`, or the **build-lune-windows** VS Code task, after `aftman install` to create `bin/lune-main.exe` for `windows-x86_64`.
-- The build uses project-pinned DarkLua to bundle relative imports and keeps `@lune/**` imports for Lune's standalone host. `bin/lune-main.luau` and `bin/lune-main.exe` are generated, untracked host-distribution artifacts.
+- Run `tooling/build.ps1 tooling/lune luau windows-x86_64` after `aftman install` to create `build/bin/windows-x86_64/tooling/lune/main.exe`.
+- The build uses project-pinned DarkLua to bundle relative imports and keeps `@lune/**` imports for Lune's standalone host. `build/luau/tooling/lune/main.luau` and `build/bin/windows-x86_64/tooling/lune/main.exe` are generated, untracked host-distribution artifacts.
 - Do not treat this executable as the finalized framework CLI, runtime generator, or Roblox deployment mechanism. Update documentation and the durable distribution decision whenever its host interface or release ownership changes.
 
 ## Pull requests

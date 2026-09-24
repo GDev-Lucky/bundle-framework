@@ -1,0 +1,13 @@
+{
+    "name": "bundle-framework",
+    "private": true,
+    "workspaces": [
+        "tooling/linter/vscode"
+    ],
+    "scripts": {
+        "build": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./tooling/build.ps1 . complete",
+        "build:tooling": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./tooling/build.ps1 tooling complete",
+        "test:extension": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./tooling/build.ps1 tooling/linter test",
+        "check": "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"& './tooling/build.ps1' 'tooling/linter' 'luau' 'windows-x86_64'; & './build/bin/windows-x86_64/tooling/linter/cli.exe' check src examples tooling\""
+    }
+}

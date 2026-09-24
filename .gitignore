@@ -12,9 +12,11 @@ sourcemap.json
 
 temp.md
 
-# Local VS Code extension build artifacts
-editors/vscode/node_modules/
-editors/vscode/*.vsix
+# Node.js workspace dependencies
+/node_modules/
 
-# Generated standalone Lune application
-/bin/
+# Generated build output
+/build/
+
+# User specific cline-rules
+/.clinerules/

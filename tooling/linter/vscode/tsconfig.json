@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"target": "ES2022",
+		"module": "CommonJS",
+		"moduleResolution": "Node",
+		"rootDir": "src",
+		"outDir": "../../../build/js/linter-vscode",
+		"types": ["node", "vscode"],
+		"strict": true,
+		"noEmitOnError": true,
+		"skipLibCheck": true
+	},
+	"include": ["src/**/*.ts"]
+}
