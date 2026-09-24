@@ -11,3 +11,4 @@ All notable changes to this project will be documented in this file.
 - Removed Selene from the development toolchain.
 - Added a portable framework baseline with a protocol abstraction, JSON snapshot protocol, workspace, and signal utility.
 - Added a reproducible Windows x64 standalone Lune host build using DarkLua bundling and Lune's executable builder.
+- Recorded separate shared, server, and client runtime build targets; capability-driven Lune/Studio hosts; explicit project ownership; and Studio-plugin read-only behavior for Rojo-owned projects.

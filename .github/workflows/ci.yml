@@ -14,5 +14,3 @@ jobs:
       - run: aftman install
       - run: stylua --check src examples tooling
       - run: lune run tooling/naming/cli.luau check src examples tooling
-      - run: rojo build example.project.json --output bundle-framework-example.rbxlx
-      - run: rojo build package.project.json --output bundle-framework.rbxm

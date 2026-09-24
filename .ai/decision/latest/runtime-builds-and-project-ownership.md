@@ -1,0 +1,3 @@
+# Latest Runtime Builds and Project Ownership Decision
+
+- [`2026-09-24-002-runtime-builds-and-project-ownership.md`](../2026-09-24-002-runtime-builds-and-project-ownership.md): package the authoring compiler with Lune/VS Code and Studio hosts; install separate shared, server, and client runtime builds into generated projects; use explicit host capabilities and project ownership; keep the Studio plugin read-only for Rojo-owned projects.

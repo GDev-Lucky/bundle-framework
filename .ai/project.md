@@ -10,18 +10,20 @@
 - This repository is resetting from a Luau-only static API to an external-tool plus Luau-runtime framework.
 - The external tool will own authoring-time bundle discovery, dependency enforcement, import and `require` processing, type information, editor autocomplete support, and intermediate-representation generation.
 - The Luau runtime will consume the generated intermediate representation and own Roblox-specific runtime behavior.
-- Framework consumers will install the shared core, authoring-time tooling, and runtime as Luau source in their projects.
-- The VS Code extension and Studio plugin will be thin hosts for the project's Luau tooling. They translate platform events, expose explicit native capabilities, and apply platform-specific results.
-- Rojo filesystem-to-Studio synchronization is the supported development workflow for shared source. Rojo-managed scripts are authored on disk; tooling is excluded from production mappings.
+- Framework releases package the portable authoring compiler for the Lune/VS Code host and Studio plugin. Generated projects receive compiled runtime artifacts rather than authoring-time tooling.
+- The VS Code/Lune host and Studio plugin are thin capability hosts. They translate platform events, expose explicit native capabilities, and apply platform-specific results without exposing native values to portable authoring code.
+- Rojo filesystem-to-Studio synchronization is the filesystem-owned workflow. Rojo-managed scripts are authored on disk, and the Studio plugin is read-only for that project: it must not create, update, move, or remove managed objects.
 - `tooling/` contains repository development tools. It may use Lune host APIs but is excluded from framework/runtime packages and production Rojo mappings.
 - `src/framework/` is the portable, pure-Luau framework root. It may not use Roblox APIs, services, `Instance`, `task`, Lune APIs, or `src/runtime/`.
 - `src/runtime/` is the Roblox-only runtime root. It may use Roblox APIs and may depend on `src/framework/`; dependencies do not flow in the other direction.
+- Future runtime output has `shared`, `server`, and `client` build targets. Server and client targets may depend on shared code only; shared code may depend on neither runtime realm and server/client targets may not depend on each other.
 - Dedicated VS Code workspace files isolate Luau-LSP analysis: tooling and framework use the standard platform, and runtime uses the Roblox platform. They must be opened in separate windows because Luau-LSP selects one platform per window.
 - Internal package imports use relative string paths with `/`, `./` or `../`, no `.luau` suffix, and directory resolution through `init.luau`.
 - Stack currently retained: Roblox, strict Luau when runtime code is added, Rojo, Git, Aftman, StyLua, and Lune for portable authoring-tool execution. Selene is removed.
 - `src/framework/` now has an early portable baseline: `Framework` owns a `Workspace`; `Protocol` supplies root/child/source access and a change signal; `SnapshotProtocol` adapts an in-memory JSON-compatible snapshot.
 - `tooling/lune/main.luau` currently reads a JSON snapshot from standard input, constructs `SnapshotProtocol` and `Framework`, and has no stable public output protocol.
 - `tooling/lune/build-windows.ps1` bundles project-relative imports with DarkLua 0.19.0, preserves `@lune/**` imports, and builds `bin/lune-main.exe` for `windows-x86_64` through Lune 0.10.5. The generated `bin/lune-main.luau` and executable are ignored host-distribution artifacts.
+- Project metadata will explicitly record ownership, framework/runtime build version, schema version, and project identity. Studio-owned projects may be changed by the plugin; ambiguous ownership must safely default to read-only behavior.
 - `example.project.json` and `package.project.json` are currently deleted in the working tree, so Rojo build validation is blocked until project files are restored or replaced.
 
 ## Architecture Boundary
@@ -43,7 +45,7 @@
 
 - No stable external-tool interface, host capability contract, intermediate schema, runtime API, loader, lifecycle, dependency resolution, networking, or client asset exposure is implemented yet.
 - The removed `manifest()` / `define()` / `bundle.require()` static API is not current or supported.
-- Exact Rojo project topology, capability names, public CLI, generated runtime-output location, intermediate serialization, runtime lifecycle, and release ownership require separate design decisions. Per-root strict `.luaurc` files and dedicated Luau-LSP workspace platform settings are configured.
+- Exact Rojo project topology, capability names, public CLI, generated runtime-output location, intermediate serialization, runtime lifecycle, bootstrap contract, metadata schema, and asset-delivery lifecycle require separate design decisions. Per-root strict `.luaurc` files and dedicated Luau-LSP workspace platform settings are configured.
 
 ## Workflow
 

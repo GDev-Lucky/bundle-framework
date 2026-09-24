@@ -1,9 +1,9 @@
 # Bundle Framework
 
-Bundle Framework is being reset as a two-part Roblox framework:
+Bundle Framework is being reset as an authoring compiler plus Roblox runtime framework:
 
-- A project-installed **Luau authoring tool** owns authoring-time analysis and generation, hosted by thin VS Code and Roblox Studio integrations.
-- A **Luau runtime** consumes the tool's generated intermediate representation inside Roblox.
+- A portable **Luau authoring compiler** owns authoring-time analysis and generation, packaged by thin VS Code/Lune and Roblox Studio hosts.
+- Compiled **shared, server, and client runtime** artifacts consume the compiler's generated representation inside Roblox.
 
 > **Status:** early implementation. The prior Luau-only static API remains removed. A portable framework baseline, JSON snapshot input, and a Windows x64 standalone Lune host artifact are implemented; the authoring tool contract, intermediate representation, and Roblox runtime remain in design.
 
@@ -17,9 +17,9 @@ The external tool will make bundle authoring straightforward while keeping runti
 - providing type information and editor autocomplete support; and
 - producing a simple, validated intermediate representation for the runtime.
 
-Framework projects will install the shared Luau core, authoring-time tooling, and runtime source. The VS Code extension hosts the tooling in a Luau runtime and adapts VS Code events and capabilities; the Studio plugin directly hosts the same Rojo-synced tooling through Roblox-specific capabilities. Shared tooling uses platform-neutral, serializable data rather than VS Code or Roblox-native values.
+Framework releases package the portable authoring compiler with the VS Code/Lune host and Studio plugin. Generated projects install only versioned runtime artifacts and generated output, not authoring tooling. Hosts adapt their native events and capabilities while portable compiler code uses platform-neutral, serializable data.
 
-During development, Rojo synchronizes the filesystem source—normally edited in VS Code—into Studio. Tooling belongs only in development mappings; production game mappings include the runtime and generated runtime output, not authoring tooling.
+During Rojo development, the filesystem is authoritative and synchronizes into Studio. The Studio plugin is read-only for a Rojo-owned project: it may inspect, diagnose, and navigate, but must not create, modify, move, or remove managed objects. In Studio-only projects, the plugin owns the DataModel project instead. Authoring tooling never belongs in production game mappings.
 
 The Luau runtime will consume that generated representation and perform only Roblox-specific runtime behavior. It must not repeat project discovery, dependency-graph analysis, import resolution, or authoring-time type generation.
 
@@ -29,17 +29,19 @@ The systems below are confirmed architecture, **not implemented APIs**.
 
 - Bundles will have framework-only dependency declarations that the tool validates and removes from generated runtime output. The project may later provide a custom Studio widget and visual editor for those declarations.
 - Bundle scripts will distinguish explicit entries, private modules, and public APIs. `server` modules are server-only; `shared` modules may run on both sides. The tool resolves framework imports, enforces declared public access, and prevents shared code from importing server-only code.
+- Runtime output will have separate shared, server, and client build targets. Server and client runtime code may depend on shared runtime code, but neither realm may depend on the other and shared code may depend on neither realm. Shared utilities such as `Signal` can therefore be emitted once for both sides when appropriate.
 - Client entries are explicit execution and exposure boundaries. A future server-side entry start operation will authorize generated client code for a player. The runtime can then lazily deliver only assets that the active entry is eligible to use.
 - The tool will trace statically provable `asset()` keys through client values, framework networking, and authoritative server state. For example, it can associate an inventory item key with an icon asset and generate server-side grant/revocation hooks when fully traced inventory state changes.
 - When that relationship cannot be proven, compilation will fail closed unless the author provides a server-only asset authorization policy. Policies can revoke their own scoped grants; grants remain reference-counted so one user cannot remove an asset still required by another active entry or policy.
 - This minimizes which clients receive code and assets, but it cannot make content secret after it has been delivered to a client. Critical logic and authoritative decisions remain server-only.
+- Canonical assets remain server-owned. The future server/client runtime may deliver authorized per-player copies through `PlayerGui`, but its delivery hierarchy and lifecycle are not yet implemented.
 - Networking is intended to generate optimized codecs for proven payload shapes, fall back to supported Roblox remote serialization when shape is unknown, report unsupported values, and validate every client-to-server input on the server.
 
 ## Repository layout
 
 - [`tooling/`](tooling): repository development tools and the Lune host entry point, excluded from framework/runtime packages.
 - [`src/framework/`](src/framework): portable, pure-Luau baseline containing the framework, workspace, protocol abstraction, snapshot protocol, and signal utility.
-- [`src/runtime/`](src/runtime): reserved Roblox-only runtime package, which may depend on `src/framework/`.
+- [`src/runtime/`](src/runtime): reserved Roblox-only runtime source, planned to build separate shared, server, and client artifacts and allowed to depend on `src/framework/`.
 - [`examples/`](examples): future end-to-end examples.
 - [`example.project.json`](example.project.json): intentionally blank Rojo example scaffold.
 - [`package.project.json`](package.project.json): intentionally blank Rojo package scaffold.
@@ -49,10 +51,10 @@ The systems below are confirmed architecture, **not implemented APIs**.
 The following are deliberately not specified or implemented yet:
 
 - the external tool's public command-line interface and configuration format;
-- the exact package layout and host capability contract;
+- the exact package layout, host capability names, and ownership metadata schema;
 - the exact intermediate-representation schema and serialization format;
 - the runtime's public Luau API, entry lifecycle model, asset-policy syntax, and replication transport; and
-- generated runtime-output locations, ownership, and deployment workflow.
+- generated runtime-output locations, bootstrap contract, and deployment workflow.
 
 These decisions must be designed together so that the intermediate boundary is stable, simple, and sufficient for runtime needs.
 
