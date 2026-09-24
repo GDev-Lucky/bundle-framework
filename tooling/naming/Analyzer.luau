@@ -140,7 +140,8 @@ local function parseBindings(
 	end
 
 	local initializer = if #names == 1 then findInitializer(tokens, index) else nil
-	local allowPascalCase = initializer ~= nil and (initializer.value == "{" or initializer.value == "require")
+	local allowPascalCase = initializer ~= nil
+		and (initializer.value == "{" or initializer.value == "require" or initializer.value == "setmetatable")
 	for _, name in names do
 		validateName(diagnostics, name, if isConstant then "constant" else "variable", allowPascalCase)
 	end

@@ -14,6 +14,7 @@ local valid = [[
 const MAX_RETRIES = 3
 local ModuleName = require("./ModuleName")
 local Parser = {}
+local SnapshotProtocol = setmetatable({}, Protocol)
 export type ParseResult = { value: string }
 type function TransformValue(argument: number): number
 end

@@ -15,3 +15,6 @@ temp.md
 # Local VS Code extension build artifacts
 editors/vscode/node_modules/
 editors/vscode/*.vsix
+
+# Generated standalone Lune application
+/bin/

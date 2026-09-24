@@ -2,6 +2,20 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "build-lune-windows",
+            "type": "process",
+            "command": "powershell.exe",
+            "args": [
+                "-NoProfile",
+                "-ExecutionPolicy",
+                "Bypass",
+                "-File",
+                "${workspaceFolder}\\tooling\\lune\\build-windows.ps1"
+            ],
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
             "label": "Format check",
             "type": "shell",
             "command": "stylua",
